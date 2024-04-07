@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>Hola esto es para probar el script de MegaBot</div>
+
+    <script>
+        (function() {
+            // URL del script compilado de tu chatbot
+            //var chatBotScriptUrl = 'http://localhost:3000';
+            var chatBotScriptUrl = 'https://three-2-10-megamoto-front.onrender.com';
+        
+            // Crear un script tag
+            var script = document.createElement('script');
+            script.src = chatBotScriptUrl;
+            script.async = true;
+        
+            // Insertar el script en el documento
+            document.body.appendChild(script);
+        
+            script.onload = function() {
+                // Llama a initChatBot para inicializar el chatbot
+                window.initChatBot();
+            };
+        })();
+        </script>
+</body>
+</html>
