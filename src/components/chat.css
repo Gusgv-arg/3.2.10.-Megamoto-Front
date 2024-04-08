@@ -6,17 +6,33 @@
 }
 
 .chatbot-toggle {
-    color: white;
+    /* color: white */
+    background-color: white;
     border: none;
     cursor: pointer;
     padding: 10px;
     border-radius: 50%;
     font-size: 16px;
 }
+/* Solo muestra el modal cuando el chat está cerrado */
+.chatbot-container.closed .chatbot-toggle:hover::after {
+    content: "Conversá con MegaBot, nuestro Asistente Virtual";
+    position: absolute;
+    top: -80px; 
+    left: -80px; 
+    transform: translateX(-50px) translateY(-30px) ; /* Ajuste adicional para mover hacia arriba */
+    background-color: white;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+    z-index: 1001; 
+    background-color: black;
+    color: white
+}
 
 .chat-interface {
     background-color: white;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 6px 6px rgba(0,0,0,0.1);
     width: 300px;
     padding: 20px;
     border-radius: 10px;
@@ -38,7 +54,7 @@
 }
 
 .message.user {
-    background-color: #005eff;
+    background-color: black;
     color: white;
     align-self: flex-end;
 }
@@ -56,7 +72,7 @@
 }
 
 .message-form button {
-    background-color: #005eff;
+    background-color:black;
     color: white;
     border: none;
     padding: 10px 15px;

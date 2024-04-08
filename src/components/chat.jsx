@@ -3,33 +3,37 @@ import '../components/chat.css'; // Asegúrate de crear este archivo para estili
 import logo from "../assets/chat-bubble.svg"
 import cross from "../assets/xmark-circle.svg"
 import axios from "axios"
-import ReactDOM from 'react-dom';
 const apiUrl = process.env.REACT_APP_API_URL;
 
 const ChatBot = () => {
 
-    // Dentro de tu archivo Chat.jsx, después de definir tu componente
-    window.initChatBot = function () {
-        const chatBotDiv = document.createElement('div');
-        document.body.appendChild(chatBotDiv);
-        ReactDOM.render(<ChatBot />, chatBotDiv);
-    };
-    const [isOpen, setIsOpen] = useState(false); // Para controlar la visibilidad
-    const [messages, setMessages] = useState([]); // Almacenar los mensajes del chat
-    const [userInput, setUserInput] = useState(''); // Controlar la entrada del usuario
+    console.log("MegaBot pointing to:", apiUrl)
+
+    const [isOpen, setIsOpen] = useState(false); 
+    const [messages, setMessages] = useState([]); 
+    const [userInput, setUserInput] = useState('');
     const [userId, setUserId] = useState('');
 
-    const toggleChat = () => setIsOpen(!isOpen); // Abrir/Cerrar el chat
+    // For automatic scroll in the UI
+    const messagesEndRef = React.useRef(null);
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
 
-    const handleUserInput = (e) => setUserInput(e.target.value); // Manejar cambio en la entrada de texto
+    // Open and close chat
+    const toggleChat = () => setIsOpen(!isOpen); 
+
+    // Users input
+    const handleUserInput = (e) => setUserInput(e.target.value); 
 
     const sendMessage = async (e) => {
         e.preventDefault();
         if (!userInput.trim()) return;
 
         const newMessage = { id: userId, text: userInput, sender: 'user' };
-        setMessages([...messages, newMessage]); // Añadir nuevo mensaje al chat
-
+        // Add new message to chat
+        setMessages([...messages, newMessage]);
+        
         const messageData = {
             webUser: userId,
             webMessage: userInput,
@@ -42,21 +46,20 @@ const ChatBot = () => {
         try {
             const response = await axios.post(apiUrl, messageData);
             const botResponse = {
-                id: Date.now(), // Considera usar algo más único aquí
-                text: response.data.message, // Asume que la API responde con un objeto que tiene una propiedad 'message'
+                id: Date.now(),
+                text: response.data.message,
                 sender: 'megaBot',
             };
             setMessages((prevMessages) => [...prevMessages, botResponse]);
         } catch (error) {
             console.error('Error al enviar el mensaje:', error.message);
-            // Aquí puedes manejar el error, por ejemplo, mostrando un mensaje al usuario
             const errorMessage = { text: "Lo lamento, MegaBot no pudo procesar tu mensaje. Por favor intentá más tarde. ¡Gracias!" }
             setMessages((prevMessages) => [...prevMessages, errorMessage]);
             setUserInput('')
         }
     };
 
-    // Asignar o recuperar el userId desde el Local Storage
+    // Asign userId with Local Storage && automatic scroll when message is added
     useEffect(() => {
         let existingId = localStorage.getItem('userId');
         if (!existingId) {
@@ -67,10 +70,11 @@ const ChatBot = () => {
         } else {
             setUserId(existingId);
         }
-    }, []);
+        scrollToBottom()
+    }, [messages]);
 
     return (
-        <div className={`chatbot-container ${isOpen ? 'open' : ''}`}>
+        <div className={`chatbot-container ${isOpen ? 'open' : 'closed'}`}>
             <button onClick={toggleChat} className="chatbot-toggle">
                 {isOpen ? <img alt="cross" src={cross} /> : <img alt="icono" src={logo} />}
             </button>
@@ -82,6 +86,7 @@ const ChatBot = () => {
                                 {msg.text}
                             </div>
                         ))}
+                        <div ref={messagesEndRef} />
                     </div>
                     <form onSubmit={sendMessage} className="message-form">
                         <input
