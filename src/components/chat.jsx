@@ -9,10 +9,12 @@ const ChatBot = () => {
 
     console.log("MegaBot pointing to:", apiUrl)
 
-    const [isOpen, setIsOpen] = useState(false); 
-    const [messages, setMessages] = useState([]); 
+    const [isOpen, setIsOpen] = useState(false);
+    const [messages, setMessages] = useState([]);
     const [userInput, setUserInput] = useState('');
     const [userId, setUserId] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [showLoadingText, setShowLoadingText] = useState(false);
 
     // For automatic scroll in the UI
     const messagesEndRef = React.useRef(null);
@@ -21,19 +23,28 @@ const ChatBot = () => {
     };
 
     // Open and close chat
-    const toggleChat = () => setIsOpen(!isOpen); 
+    const toggleChat = () => setIsOpen(!isOpen);
 
     // Users input
-    const handleUserInput = (e) => setUserInput(e.target.value); 
+    const handleUserInput = (e) => setUserInput(e.target.value);
 
     const sendMessage = async (e) => {
         e.preventDefault();
         if (!userInput.trim()) return;
 
+        // Change loading state to true
+        setLoading(true);
+        setShowLoadingText(true)
+
+        // Appearing and disappearing Effect
+        let loadingInterval = setInterval(() => {
+            setShowLoadingText(show => !show);
+        }, 500);
+
         const newMessage = { id: userId, text: userInput, sender: 'user' };
         // Add new message to chat
         setMessages([...messages, newMessage]);
-        
+
         const messageData = {
             webUser: userId,
             webMessage: userInput,
@@ -56,6 +67,10 @@ const ChatBot = () => {
             const errorMessage = { text: "Lo lamento, MegaBot no pudo procesar tu mensaje. Por favor intentá más tarde. ¡Gracias!" }
             setMessages((prevMessages) => [...prevMessages, errorMessage]);
             setUserInput('')
+        } finally {
+            setLoading(false);
+            setShowLoadingText(false);
+            clearInterval(loadingInterval)
         }
     };
 
@@ -93,7 +108,10 @@ const ChatBot = () => {
                             type="text"
                             value={userInput}
                             onChange={handleUserInput}
-                            placeholder="Escribe un mensaje..."
+                            //placeholder={showLoadingText ? "Procesando tu consulta..." : "Escribe un mensaje..."}
+                            placeholder={loading ? (showLoadingText ? "Procesando tu consulta..." : "") : "Escribe un mensaje..."}
+
+                            disabled={loading}
                         />
                         <button type="submit">Enviar</button>
                     </form>
