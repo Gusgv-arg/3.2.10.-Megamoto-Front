@@ -1,9 +1,9 @@
-import Chat from "../src/components/chat.jsx"
+import ChatBot from "../src/components/chat.jsx";
 
 function App() {
   return (
     <div className="App">
-      <Chat/>
+      <ChatBot/>      
     </div>
   );
 }
