@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import '../components/chat.css'; 
-import logo from "../assets/chat-bubble.svg"
-import cross from "../assets/xmark-circle.svg"
+//import logo from "../assets/chat-bubble.svg"
+import logo from "../assets/chat-bubble-solid.svg"
+//import logo from "../assets/chat-lines-solid.svg"
+//import cross from "../assets/xmark-circle.svg"
+import cross from "../assets/xmark-circle-solid.svg"
 import axios from "axios"
 import { Content } from './content';
 
@@ -9,12 +12,17 @@ const apiUrl = process.env.REACT_APP_API_URL;
 console.log("MegaBot pointing to:", apiUrl)
 
 const ChatBot = () => {
+    // Initial greeting
+    const greeting =
+    "¡Hola! 👋 Soy MegaBot, Asistente Virtual de Megamoto, puedo cometer errores. Estoy para agilizar tu atención y luego un vendedor se pondrá en contacto contigo. ¿Qué moto estás buscando? 😀";
+
     const [isOpen, setIsOpen] = useState(false);
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState([{id: Date.now(), sender: "MegaBot", text: greeting}]);
     const [userInput, setUserInput] = useState('');
     const [userId, setUserId] = useState('');
     const [loading, setLoading] = useState(false);
     const [isTyping, setIsTyping] = useState(false)
+
 
     // For automatic scroll in the UI
     const messagesEndRef = React.useRef(null);

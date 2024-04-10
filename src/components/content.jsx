@@ -38,7 +38,7 @@ export const Content = (props) => {
             }
         }
         return () => {
-            clearInterval(intervalId);            
+            clearInterval(intervalId);
         };
     }, [props.messages]);
 
@@ -46,15 +46,17 @@ export const Content = (props) => {
         <div>
             {props.messages?.map((chatMessage, index) => (
                 <div className={`message ${chatMessage.sender}`}>
-                    <strong>{chatMessage.sender === "user" ? "" : <img
+                    {chatMessage.sender === "user" ? "" : <img
                         src={chatbot}
                         alt="chatbot"
                         className="chatbot-image"
-                    />}</strong> 
-                    <span>{chatMessage.sender === "MegaBot" && index === props.messages.length - 1 ? printedContent[index] : chatMessage.text}</span><br />
+                    />}
+                    <span>
+                        {chatMessage.sender === "MegaBot" && index === props.messages.length - 1 ? printedContent[index] : chatMessage.text}<br />
+                    </span>
                 </div>
             ))}
-            <div ref={endOfMessagesRef}/>
+            <div ref={endOfMessagesRef} />
         </div>
     );
 };
