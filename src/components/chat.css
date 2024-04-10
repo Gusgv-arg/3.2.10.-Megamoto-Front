@@ -3,6 +3,7 @@
     bottom: 20px;
     right: 20px;
     z-index: 1000;
+    
 }
 
 .chatbot-toggle {
@@ -36,32 +37,41 @@
     width: 300px;
     padding: 20px;
     border-radius: 10px;
-    margin-top: 10px;
+    margin-top: 10px;   
+    /* display: flex; 
+    flex-direction: column */
 }
 
 .messages {
     height: 300px;
     overflow-y: auto;
+    overflow: auto;
     margin-bottom: 20px;
+    scrollbar-width: none;      
 }
-
+/* Oculta los scrollbars en Webkit (Chrome, Safari, etc.) */
+.messages::-webkit-scrollbar {
+    display: none;
+  }
 .message {
-    margin: 0px ;
+    margin: 5px ;
     padding: 10px;
     background-color: #f1f1f1;
     border-radius: 15px;
-    width: fit-content;
+    width: fit-content;   
+    max-width: 89%; /* Establecer un ancho máximo */
+    word-wrap: break-word;   
 }
-
+.message.MegaBot span {
+    position: relative;
+    top: -7px;
+} 
 .message.user {
     background-color: black;
     color: white;
-    align-self: flex-end;
-}
-.message.MegaBot span {
-    /* align-self: flex-end; */
-    position: relative;
-    top: -7px;
+    align-self: flex-end; 
+    align-items:end;
+       
 }
 
 .message-form {

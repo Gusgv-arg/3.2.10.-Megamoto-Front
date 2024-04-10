@@ -24,6 +24,7 @@ export const Content = (props) => {
                 let currentIndex = 0;
 
                 intervalId = setInterval(() => {
+                    scrollToBottom()
                     setPrintedContent((prevContent) => {
                         const newContent = [...prevContent];
                         newContent[lastAssistantMessageIndex] = content.slice(0, currentIndex + 1).join("");
@@ -43,7 +44,7 @@ export const Content = (props) => {
     }, [props.messages]);
 
     return (
-        <div>
+        <>
             {props.messages?.map((chatMessage, index) => (
                 <div className={`message ${chatMessage.sender}`}>
                     {chatMessage.sender === "user" ? "" : <img
@@ -52,11 +53,11 @@ export const Content = (props) => {
                         className="chatbot-image"
                     />}
                     <span>
-                        {chatMessage.sender === "MegaBot" && index === props.messages.length - 1 ? printedContent[index] : chatMessage.text}<br />
+                        {chatMessage.sender === "MegaBot" && index === props.messages.length - 1 ? printedContent[index] : chatMessage.text}
                     </span>
                 </div>
             ))}
             <div ref={endOfMessagesRef} />
-        </div>
+        </>
     );
 };
